@@ -44,7 +44,7 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Description</th>
+                        <th style="width: 234px">Description</th>
                         <th>Variant</th>
                         <th width="150px">Action</th>
                     </tr>
@@ -52,21 +52,26 @@
 
                     <tbody>
 
+                    @foreach ($products as $product)
                     <tr>
                         <td>1</td>
-                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>
-                        <td>Quality product in low cost</td>
+                        <td>{{$product->title}} <br> Created at : {{$product->created_at}}</td>
+                        <td>{{$product->description}}</td>
                         <td>
                             <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
-
-                                <dt class="col-sm-3 pb-0">
-                                    SM/ Red/ V-Nick
+                                {{-- SM/ Red/ V-Nick --}}
+                                <dt class="col-sm-2 pb-0">
+                                    @foreach ($product->productVariants as $variant)
+                                        {{$variant->variant}}
+                                    @endforeach
                                 </dt>
                                 <dd class="col-sm-9">
+                                    @foreach ($product->productVariantPrices as $price)
                                     <dl class="row mb-0">
-                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>
-                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>
+                                        <dt class="col-sm-4 pb-0">Price : {{$price->price}}</dt>
+                                        <dd class="col-sm-8 pb-0">InStock : {{$price->stock}}</dd>
                                     </dl>
+                                    @endforeach
                                 </dd>
                             </dl>
                             <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
@@ -77,6 +82,7 @@
                             </div>
                         </td>
                     </tr>
+                    @endforeach
 
                     </tbody>
 
@@ -88,10 +94,10 @@
         <div class="card-footer">
             <div class="row justify-content-between">
                 <div class="col-md-6">
-                    <p>Showing 1 to 10 out of 100</p>
+                    <p>{{ $products->firstItem() }} to {{ $products->lastItem() }} out of {{$products->total()}}</p>
                 </div>
                 <div class="col-md-2">
-
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>

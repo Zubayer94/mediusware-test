@@ -10,4 +10,8 @@ class Variant extends Model
         'title', 'description'
     ];
 
+    public function ProductVariantPrice()
+    {
+        return $this->belongsTo('App\Models\ProductVariantPrice');
+    }
 }

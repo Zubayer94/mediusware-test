@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ProductVariant;
-use App\Models\ProductVariantPrice;
 use App\Models\Variant;
 use Illuminate\Http\Request;
+use App\Models\ProductVariant;
+use App\Models\ProductVariantPrice;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.index');
+        $products = Product::with(['productVariantPrices', 'productVariants'])->paginate(5);
+
+        Log::info($products);
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -39,7 +43,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
 
@@ -51,7 +54,6 @@ class ProductController extends Controller
      */
     public function show($product)
     {
-
     }
 
     /**
