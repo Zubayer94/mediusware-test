@@ -8,14 +8,16 @@
 
 
     <div class="card">
-        <form action="" method="get" class="card-header">
+        <form action="{{ action('ProductController@index') }}" method="get" class="card-header">
             <div class="form-row justify-content-between">
                 <div class="col-md-2">
                     <input type="text" name="title" placeholder="Product Title" class="form-control">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <select name="variant" id="" class="form-control">
-
+                        @foreach ($variants as $item)
+                             <option value="{{ $item->variant }}">{{ $item->variant }}</option> 
+                        @endforeach
                     </select>
                 </div>
 
@@ -66,12 +68,12 @@
                                     @endforeach
                                 </dt>
                                 <dd class="col-sm-9">
-                                    @foreach ($product->productVariantPrices as $price)
                                     <dl class="row mb-0">
-                                        <dt class="col-sm-4 pb-0">Price : {{$price->price}}</dt>
-                                        <dd class="col-sm-8 pb-0">InStock : {{$price->stock}}</dd>
+                                        @foreach ($product->productVariantPrices as $price)
+                                            <dt class="col-sm-4 pb-0">Price : {{$price->price}}</dt>
+                                            <dd class="col-sm-8 pb-0">InStock : {{$price->stock}}</dd>
+                                        @endforeach
                                     </dl>
-                                    @endforeach
                                 </dd>
                             </dl>
                             <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>

@@ -9,6 +9,7 @@ use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
 use Illuminate\Support\Facades\Log;
 
+
 class ProductController extends Controller
 {
     /**
@@ -16,12 +17,43 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $req)
     {
-        $products = Product::with(['productVariantPrices', 'productVariants'])->paginate(5);
+        $title = $req->input('title');
+        $variant = $req->input('variant');
+        $price_from = $req->input('price_from');
+        $price_to = $req->input('price_to');
+        $date = $req->input('date');
+
+        $products = Product::query()
+            ->with([
+                'productVariantPrices' => function ($query) use ($price_from, $price_to) {
+                    $query->when(!empty($price_from), function ($q) use ($price_from) {
+                        $q->where('price', '>=', $price_from);
+                    })
+                        ->when(!empty($price_to), function ($q) use ($price_to) {
+                            $q->where('price', '<=', $price_to);
+                        });
+                },
+                'productVariants' => function ($query) use ($variant) {
+                    $query->when(!empty($variant), function ($q) use ($variant) {
+                        $q->where('variant', $variant);
+                    });
+                },
+            ])
+            ->when(!empty($title), function ($query) use ($title) {
+                $query->where('title', 'like', '%' . $title . '%');
+            })
+            ->when(!empty($date), function ($query) use ($date) {
+                $query->whereDate('created_at', '=', $date);
+            })
+
+            ->paginate(5);
+
+        $variants = ProductVariant::select('variant')->groupBy('variant')->get();
 
         Log::info($products);
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'variants'));
     }
 
     /**
