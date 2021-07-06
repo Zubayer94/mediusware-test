@@ -30,6 +30,8 @@ try {
 
 window.axios = require('axios');
 
+window.axios.defaults.baseURL = 'http://mediusware-test.test/api'
+
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**

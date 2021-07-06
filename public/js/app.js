@@ -2038,7 +2038,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       product_variant_prices: [],
       dropzoneOptions: {
-        url: 'https://httpbin.org/post',
+        url: 'http://mediusware-test.test/api/uploadImage',
         thumbnailWidth: 150,
         maxFilesize: 0.5,
         headers: {
@@ -2098,6 +2098,9 @@ __webpack_require__.r(__webpack_exports__);
       }, []);
       return ans;
     },
+    afterUploadComplete: function afterUploadComplete(file, response) {
+      this.images = response.images;
+    },
     // store product into database
     saveProduct: function saveProduct() {
       var product = {
@@ -2108,7 +2111,7 @@ __webpack_require__.r(__webpack_exports__);
         product_variant: this.product_variant,
         product_variant_prices: this.product_variant_prices
       };
-      axios.post('/product', product).then(function (response) {
+      axios.post('storeProducts', product).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
         console.log(error);
@@ -50566,7 +50569,8 @@ var render = function() {
             [
               _c("vue-dropzone", {
                 ref: "myVueDropzone",
-                attrs: { id: "dropzone", options: _vm.dropzoneOptions }
+                attrs: { id: "dropzone", options: _vm.dropzoneOptions },
+                on: { "vdropzone-success": _vm.afterUploadComplete }
               })
             ],
             1
@@ -63128,6 +63132,7 @@ try {
 
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.baseURL = 'http://mediusware-test.test/api';
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -63300,8 +63305,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/rifat/Programming/mediusware/interview/interview-question-sr/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/rifat/Programming/mediusware/interview/interview-question-sr/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! F:\laragon\www\mediusware-test\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! F:\laragon\www\mediusware-test\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

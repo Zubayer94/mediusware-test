@@ -24,7 +24,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Media</h6>
                     </div>
                     <div class="card-body border">
-                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+                        <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"   @vdropzone-success="afterUploadComplete"></vue-dropzone>
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@ export default {
             ],
             product_variant_prices: [],
             dropzoneOptions: {
-                url: 'https://httpbin.org/post',
+                url: 'http://mediusware-test.test/api/uploadImage',
                 thumbnailWidth: 150,
                 maxFilesize: 0.5,
                 headers: {"My-Awesome-Header": "header value"}
@@ -176,6 +176,9 @@ export default {
             }, []);
             return ans;
         },
+        afterUploadComplete(file, response){
+            this.images = response.images;
+        },
 
         // store product into database
         saveProduct() {
@@ -189,7 +192,7 @@ export default {
             }
 
 
-            axios.post('/product', product).then(response => {
+            axios.post('storeProducts', product).then(response => {
                 console.log(response.data);
             }).catch(error => {
                 console.log(error);
